@@ -1,0 +1,24 @@
+spring:
+
+  kafka:
+    bootstrap-servers:
+    - "localhost:29092"
+    - "localhost:29093"
+    consumer:
+      group-id: "kafka-spring"
+      auto-offset-reset: earliest
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: "jdbc:mariadb://localhost:3306/test"
+    password: "root"
+    username: "root"
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 3
+      idle-timeout: 10000
+      connection-timeout: 20000
+
