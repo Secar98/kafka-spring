@@ -26,7 +26,11 @@ public class KafkaService<T> {
     }
 
     public void sendMessage(String topic, T clazz) {
-        kafkaTemplate.send(topic, clazz);
+        kafkaTemplate.send(topic, clazz).thenApply(
+                result -> {
+                    LOGGER.info("Sent message: {}", clazz.getClass());
+                    return result;
+                });
     }
 
     @KafkaListener(
