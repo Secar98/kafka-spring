@@ -6,23 +6,25 @@ import com.example.kafkaspring.service.MessageService;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
 
-    private final KafkaService kafkaService;
+    private final KafkaService<Message> kafkaService;
     private final MessageService messageService;
 
-    public MessageController(KafkaService kafkaService, MessageService messageService) {
+    public MessageController(KafkaService<Message> kafkaService, MessageService messageService) {
         this.kafkaService = kafkaService;
         this.messageService = messageService;
     }
 
     @PostMapping
     public void sendMessage(@RequestBody Message message) {
-        kafkaService.sendMessage(message.getMessage());
+        Message mes = new Message(message.getMessage(), LocalDateTime.now());
+        kafkaService.sendMessage("messages", mes);
     }
 
     @GetMapping("/{id}")

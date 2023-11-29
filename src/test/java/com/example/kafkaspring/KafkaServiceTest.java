@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -21,7 +23,7 @@ public class KafkaServiceTest {
      private KafkaTemplate<String, Message> kafkaTemplate;
 
      @InjectMocks
-     private KafkaService kafkaService;
+     private KafkaService<Message> kafkaService;
 
      @Test
      void saveMessage() {
@@ -31,7 +33,7 @@ public class KafkaServiceTest {
 
      @Test
      void sendMessage() {
-         kafkaService.sendMessage("test");
+         kafkaService.sendMessage("messages", new Message("test", LocalDateTime.now()));
          verify(kafkaTemplate).send(any(), any());
      }
 

@@ -7,29 +7,26 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 /**
  * Service for sending and receiving messages from Kafka.
  * */
 @Service
-public class KafkaService {
+public class KafkaService<T> {
 
     private final MessageService messageService;
-    private final KafkaTemplate<String, Message> kafkaTemplate;
+    private final KafkaTemplate<String, T> kafkaTemplate;
     private final static String TOPIC = "messages";
-
     private final static Logger LOGGER = LoggerFactory.getLogger(KafkaService.class);
 
     public KafkaService(
             MessageService messageService,
-            KafkaTemplate<String, Message> kafkaTemplate) {
+            KafkaTemplate<String, T> kafkaTemplate) {
         this.messageService = messageService;
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String message) {
-        kafkaTemplate.send(TOPIC, new Message(message, LocalDateTime.now()));
+    public void sendMessage(String topic, T clazz) {
+        kafkaTemplate.send(topic, clazz);
     }
 
     @KafkaListener(
